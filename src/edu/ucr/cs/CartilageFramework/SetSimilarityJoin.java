@@ -1,10 +1,17 @@
-package edu.ucr.cs.CartilageFramework;
+package edu.ucr.cs.CartilageSetSimilarityJoin;
 
-import java.util.HashMap;
-import java.util.Map;
+import edu.ucr.cs.CartilageFramework.Configuration;
+import edu.ucr.cs.CartilageFramework.FlexibleJoin;
+import edu.ucr.cs.CartilageFramework.Summary;
 
-public class SetSimilarityJoin implements FlexibleJoin<String, SetSimilarityConfig>{
-    SetSimilarityConfig Configuration;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class SetSimilarityJoin implements FlexibleJoin<String, SetSimilarityConfig> {
+    Double SimilarityThreshold = 0.0;
+    SetSimilarityJoin(Double SimilarityThreshold) {
+        this.SimilarityThreshold = SimilarityThreshold;
+    }
     @Override
     public Summary<String> createSummarizer1() {
         return new WordCount();
@@ -12,12 +19,31 @@ public class SetSimilarityJoin implements FlexibleJoin<String, SetSimilarityConf
 
     @Override
     public SetSimilarityConfig divide(Summary<String> s1, Summary<String> s2) {
-        return null;
+        WordCount s1wc = (WordCount) s1;
+        WordCount s2wc = (WordCount) s2;
+        for(String token: s1wc.WordCountMap.keySet()) {
+            s2wc.WordCountMap.merge(token, s1wc.WordCountMap.get(token), Integer::sum);
+        }
+
+        LinkedHashMap<String,Integer> SortedWordCountMap = s2wc.WordCountMap.entrySet().stream().
+                sorted(Map.Entry.comparingByValue()).
+                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+        return new SetSimilarityConfig(SortedWordCountMap.keySet().toArray(String[]::new));
+
     }
 
     @Override
     public int[] assign1(String k1, SetSimilarityConfig setSimilarityConfig) {
-        return new int[0];
+        String[] tokens = k1.split(" ");
+        int length = tokens.length;
+        int[] ranks = new int[length];
+        for(int i = 0; i < length; i++) {
+            ranks[i] = setSimilarityConfig.S.indexOf(tokens[i]);
+        }
+        Arrays.sort(ranks);
+        Double PrefixLength = (length - Math.ceil(SimilarityThreshold * length) + 1);
+        return Arrays.copyOfRange(ranks, 0, PrefixLength.intValue());
     }
 
     @Override
@@ -27,15 +53,16 @@ public class SetSimilarityJoin implements FlexibleJoin<String, SetSimilarityConf
 
     @Override
     public boolean verify(int b1, String k1, int b2, String k2, SetSimilarityConfig setSimilarityConfig) {
-        return false;
+        JaccardSimilarity js = new JaccardSimilarity();
+        Double s = js.apply(k1, k2);
+        return js.apply(k1, k2) >= SimilarityThreshold;
     }
 
 }
 
-class WordCount implements Summary<String> {
+class WordCount implements Summary<String>{
 
-    Map<String, Integer> WordCountMap = new HashMap<>();
-
+    public Map<String, Integer> WordCountMap = new HashMap<>();
 
     @Override
     public void add(String k) {
@@ -49,8 +76,13 @@ class WordCount implements Summary<String> {
     public void add(Summary<String> s) {
 
     }
+
+
 }
 
 class SetSimilarityConfig implements Configuration {
-
+    ArrayList<String> S = new ArrayList<>();
+    SetSimilarityConfig(String[] S) {
+        Collections.addAll(this.S, S);
+    }
 }
