@@ -80,7 +80,9 @@ public class Main {
 
                 List<Pair<Rectangle, Rectangle>> results = c.flexibleJoin(r, s, joiner);
                 System.out.println(results.size());
-
+                for (Pair<Rectangle, Rectangle> p : results) {
+                    System.out.println(p.k.x1 +","+p.k.y1 +" " + p.k.y2 +","+p.k.y2 + "|" + p.v.x1 +","+p.v.y1 +" " + p.v.y2 +","+p.v.y2);
+                }
                 break;
             }
             default: break;
