@@ -35,7 +35,7 @@ public class SetSimilarityJoin implements FlexibleJoin<String, SetSimilarityConf
         int length = tokens.length;
         int[] ranks = new int[length];
         for(int i = 0; i < length; i++) {
-            ranks[i] = setSimilarityConfig.S.indexOf(tokens[i]);
+            ranks[i] = setSimilarityConfig.S.get(tokens[i]);
         }
         Arrays.sort(ranks);
         Double PrefixLength = (length - Math.ceil(SimilarityThreshold * length) + 1);
@@ -49,11 +49,33 @@ public class SetSimilarityJoin implements FlexibleJoin<String, SetSimilarityConf
 
     @Override
     public boolean verify(int b1, String k1, int b2, String k2, SetSimilarityConfig setSimilarityConfig) {
-        JaccardSimilarity js = new JaccardSimilarity();
-        Double s = js.apply(k1, k2);
-        return js.apply(k1, k2) >= SimilarityThreshold;
+        return calculateJaccardSimilarity(k1, k2) >= SimilarityThreshold;
     }
 
+    private Double calculateJaccardSimilarity(CharSequence left, CharSequence right) {
+        Set<String> intersectionSet = new HashSet<String>();
+        Set<String> unionSet = new HashSet<String>();
+        boolean unionFilled = false;
+        int leftLength = left.length();
+        int rightLength = right.length();
+        if (leftLength == 0 || rightLength == 0) {
+            return 0d;
+        }
+
+        for (int leftIndex = 0; leftIndex < leftLength; leftIndex++) {
+            unionSet.add(String.valueOf(left.charAt(leftIndex)));
+            for (int rightIndex = 0; rightIndex < rightLength; rightIndex++) {
+                if (!unionFilled) {
+                    unionSet.add(String.valueOf(right.charAt(rightIndex)));
+                }
+                if (left.charAt(leftIndex) == right.charAt(rightIndex)) {
+                    intersectionSet.add(String.valueOf(left.charAt(leftIndex)));
+                }
+            }
+            unionFilled = true;
+        }
+        return (Double.valueOf(intersectionSet.size()) / Double.valueOf(unionSet.size()));
+    }
 }
 
 class WordCount implements Summary<String>{
@@ -70,13 +92,18 @@ class WordCount implements Summary<String>{
 
     @Override
     public void add(Summary<String> s) {
-
+        WordCount wc = (WordCount) s;
+        for(String token: WordCountMap.keySet()) {
+            WordCountMap.merge(token, wc.WordCountMap.get(token), Integer::sum);
+        }
     }
 }
 
 class SetSimilarityConfig implements Configuration {
-    ArrayList<String> S = new ArrayList<>();
-    SetSimilarityConfig(String[] S) {
-        Collections.addAll(this.S, S);
+    HashMap<String, Integer> S = new HashMap<>();
+    SetSimilarityConfig(String[] OrderedTokens) {
+        for(int i = 0; i < OrderedTokens.length; i++) {
+            this.S.put(OrderedTokens[i], i);
+        }
     }
 }
