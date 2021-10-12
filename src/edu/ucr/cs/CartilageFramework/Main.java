@@ -1,6 +1,4 @@
-package edu.ucr.cs.CartilageSetSimilarityJoin;
-
-import edu.ucr.cs.CartilageFramework.Cartilage;
+package edu.ucr.cs.CartilageFramework;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

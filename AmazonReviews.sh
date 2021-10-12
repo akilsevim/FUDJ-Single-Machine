@@ -1,0 +1,1 @@
+wget --post-data "query=use+exp%3B%0D%0A%0D%0Aselect+value+summary+from+AmazonReview+where+overall+%3D+4.0%3B&query-language=SQLPP&output-format=CLEAN_JSON&plan-format=JSON&execute-query=true" http://localhost:19001

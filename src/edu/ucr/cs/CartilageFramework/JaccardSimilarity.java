@@ -1,4 +1,4 @@
-package edu.ucr.cs.CartilageSetSimilarityJoin;
+package edu.ucr.cs.CartilageFramework;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more

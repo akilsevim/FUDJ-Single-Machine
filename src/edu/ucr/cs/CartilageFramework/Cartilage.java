@@ -63,7 +63,7 @@ public class Cartilage {
       summary1.add(k1);
 
     Summary<K> summary2 = joiner.createSummarizer2();
-    for (K k2 : r)
+    for (K k2 : s)
       summary2.add(k2);
 
     // Create the partitioning configuration

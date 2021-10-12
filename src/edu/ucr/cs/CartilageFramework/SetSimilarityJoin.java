@@ -1,8 +1,4 @@
-package edu.ucr.cs.CartilageSetSimilarityJoin;
-
-import edu.ucr.cs.CartilageFramework.Configuration;
-import edu.ucr.cs.CartilageFramework.FlexibleJoin;
-import edu.ucr.cs.CartilageFramework.Summary;
+package edu.ucr.cs.CartilageFramework;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,8 +72,6 @@ class WordCount implements Summary<String>{
     public void add(Summary<String> s) {
 
     }
-
-
 }
 
 class SetSimilarityConfig implements Configuration {
