@@ -53,10 +53,10 @@ public class Main {
                     while ((line = br.readLine()) != null) {
                         String[] lineA = line.split(",");
                         Rectangle rectangle = new Rectangle();
-                        rectangle.x1 = Double.valueOf(lineA[0]);
-                        rectangle.y1 = Double.valueOf(lineA[1]);
-                        rectangle.x2 = Double.valueOf(lineA[2]);
-                        rectangle.y2 = Double.valueOf(lineA[3]);
+                        rectangle.x1 = Double.parseDouble(lineA[0]);
+                        rectangle.y1 = Double.parseDouble(lineA[1]);
+                        rectangle.x2 = Double.parseDouble(lineA[2]);
+                        rectangle.y2 = Double.parseDouble(lineA[3]);
                         r.add(rectangle);
                     }
                 } catch (FileNotFoundException e) {
@@ -68,10 +68,10 @@ public class Main {
                     while ((line = br.readLine()) != null) {
                         String[] lineA = line.split(",");
                         Rectangle rectangle = new Rectangle();
-                        rectangle.x1 = Double.valueOf(lineA[0]);
-                        rectangle.y1 = Double.valueOf(lineA[1]);
-                        rectangle.x2 = Double.valueOf(lineA[2]);
-                        rectangle.y2 = Double.valueOf(lineA[3]);
+                        rectangle.x1 = Double.parseDouble(lineA[0]);
+                        rectangle.y1 = Double.parseDouble(lineA[1]);
+                        rectangle.x2 = Double.parseDouble(lineA[2]);
+                        rectangle.y2 = Double.parseDouble(lineA[3]);
                         s.add(rectangle);
                     }
                 } catch (FileNotFoundException e) {
