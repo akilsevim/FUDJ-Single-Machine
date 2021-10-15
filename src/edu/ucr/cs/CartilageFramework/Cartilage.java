@@ -96,17 +96,23 @@ public class Cartilage {
       }
     }
 
+
+
     List<Pair<K, K>> results = new ArrayList<>();
     // Join all matching buckets
     for (Map.Entry<Integer, List<K>> bucket1 : buckets1.entrySet()) {
       for (Map.Entry<Integer, List<K>> bucket2 : buckets2.entrySet()) {
         if (joiner.match(bucket1.getKey(), bucket2.getKey())) {
+
+          
+
           // Join all records in the matching buckets
           for (K k1 : bucket1.getValue()) {
             for (K k2 : bucket2.getValue()) {
               if (joiner.verify(bucket1.getKey(), k1, bucket2.getKey(), k2, c)) {
                 // Add to result
-                results.add(new Pair<>(k1, k2));
+                if(!results.contains(new Pair<>(k1, k2)))
+                  results.add(new Pair<>(k1, k2));
               }
             }
           }

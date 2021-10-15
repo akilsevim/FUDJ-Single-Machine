@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -35,9 +36,15 @@ public class Main {
 
                 List<Pair<String, String>> results = c.flexibleJoin(r, s, joiner);
                 System.out.println(results.size());
+                HashSet<String> uniques = new HashSet<>();
+                float totalsim = 0.0f;
                 for (Pair<String, String> p : results) {
-                    System.out.println(p.k + " / " + p.v);
+                    System.out.println(p.k + " / " + p.v + "("+Utilities.calculateJaccardSimilarityS(p.k,p.v )+")");
+                    uniques.add(p.k + " / " + p.v);
+                    totalsim += Utilities.calculateJaccardSimilarityS(p.k,p.v );
+
                 }
+                System.out.println(uniques.size());
 
                 break;
             }
