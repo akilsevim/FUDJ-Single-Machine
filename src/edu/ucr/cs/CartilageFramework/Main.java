@@ -45,7 +45,20 @@ public class Main {
 
                 }
                 System.out.println(uniques.size());
-
+                List<String> tt = new ArrayList<>();
+                List<String> ttc = new ArrayList<>();
+                try (Stream<String> stream = Files.lines(Paths.get("testtext.csv"), StandardCharsets.UTF_8)) {
+                    stream.forEach(tt::add);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ttc.addAll(tt);
+                for(String t: tt) {
+                    if(uniques.remove(t))
+                        ttc.remove(t);
+                    if(uniques.size() == 0) break;
+                }
+                System.out.println(uniques.size());
                 break;
             }
             case "spatial": {
@@ -90,6 +103,34 @@ public class Main {
                 for (Pair<Rectangle, Rectangle> p : results) {
                     System.out.println(p.k.x1 +","+p.k.y1 +" " + p.k.y2 +","+p.k.y2 + "|" + p.v.x1 +","+p.v.y1 +" " + p.v.y2 +","+p.v.y2);
                 }
+                break;
+            }
+            case "similarity-test" :{
+                List<String> r = new ArrayList<>();
+                try (Stream<String> stream = Files.lines(Paths.get("ARSummary4.csv"), StandardCharsets.UTF_8)) {
+                    stream.forEach(r::add);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                List<String> sims = new ArrayList<>();
+                try (Stream<String> stream = Files.lines(Paths.get("simtest.csv"), StandardCharsets.UTF_8)) {
+                    stream.forEach(sims::add);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                double totalSim = 0.0d;
+                int i = 0;
+                for(String s:r) {
+                    double temp = Math.round(Utilities.calculateJaccardSimilarityS(s, "good job")*100000000)/100000000d;
+                    System.out.println(temp);
+                    totalSim += temp;
+                    if(Double.parseDouble(sims.get(i)) != temp)
+                        System.out.println(s + ":" + Double.parseDouble(sims.get(i)));
+                    i++;
+                }
+                System.out.println(totalSim);
                 break;
             }
             default: break;

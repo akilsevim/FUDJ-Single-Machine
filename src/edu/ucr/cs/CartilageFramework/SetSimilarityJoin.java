@@ -111,14 +111,10 @@ abstract class Utilities {
     }
 
     public static Float calculateJaccardSimilarityS(String left, String right) {
-        Set<String> intersectionSet = new HashSet<String>();
-        Set<String> unionSet = new HashSet<String>();
-        boolean unionFilled = false;
 
+        float intersectionSize = 0;
         ArrayList<String> leftTokens = tokenizer(left);
         ArrayList<String> rightTokens = tokenizer(right);
-
-
 
         int leftLength = leftTokens.size();
         int rightLength = rightTokens.size();
@@ -127,18 +123,19 @@ abstract class Utilities {
         }
 
         for (int leftIndex = 0; leftIndex < leftLength; leftIndex++) {
-            unionSet.add(leftTokens.get(leftIndex));
-            for (int rightIndex = 0; rightIndex < rightLength; rightIndex++) {
-                if (!unionFilled) {
-                    unionSet.add(rightTokens.get(rightIndex));
+            int i = 0;
+            for (String rt: rightTokens) {
+                if (leftTokens.get(leftIndex).equals(rt)) {
+                    intersectionSize = intersectionSize + 1.0f;
+                    rightTokens.remove(i);
+                    break;
                 }
-                if (leftTokens.get(leftIndex).equals(rightTokens.get(rightIndex))) {
-                    intersectionSet.add(leftTokens.get(leftIndex));
-                }
+                i++;
             }
-            unionFilled = true;
         }
-        return (Float.valueOf(intersectionSet.size()) / ((leftLength + rightLength) - Float.valueOf(intersectionSet.size())));
+        float sim = (intersectionSize / ((leftLength + rightLength) - intersectionSize));
+        sim = Math.round(sim * 100000000)/100000000f;
+        return sim;
     }
 
     public static ArrayList<String> tokenizer(String text) {
