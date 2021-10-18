@@ -46,13 +46,12 @@ public class Main {
                 }
                 System.out.println(uniques.size());
                 List<String> tt = new ArrayList<>();
-                List<String> ttc = new ArrayList<>();
                 try (Stream<String> stream = Files.lines(Paths.get("testtext.csv"), StandardCharsets.UTF_8)) {
                     stream.forEach(tt::add);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                ttc.addAll(tt);
+                List<String> ttc = new ArrayList<>(tt);
                 for(String t: tt) {
                     if(uniques.remove(t))
                         ttc.remove(t);
@@ -68,7 +67,7 @@ public class Main {
                 List<Rectangle> r = new ArrayList<>();
                 List<Rectangle> s = new ArrayList<>();
 
-                try (BufferedReader br = new BufferedReader(new FileReader("Rectangles1.csv"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader("10000_1_R.csv"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
                         String[] lineA = line.split(",");
@@ -83,7 +82,7 @@ public class Main {
                     e.printStackTrace();
                 }
 
-                try (BufferedReader br = new BufferedReader(new FileReader("Rectangles2.csv"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader("10000_2_R.csv"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
                         String[] lineA = line.split(",");
@@ -97,12 +96,18 @@ public class Main {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-
+                HashSet<String> uniques = new HashSet<>();
                 List<Pair<Rectangle, Rectangle>> results = c.flexibleJoin(r, s, joiner);
                 System.out.println(results.size());
                 for (Pair<Rectangle, Rectangle> p : results) {
-                    System.out.println(p.k.x1 +","+p.k.y1 +" " + p.k.y2 +","+p.k.y2 + "|" + p.v.x1 +","+p.v.y1 +" " + p.v.y2 +","+p.v.y2);
+                    uniques.add(p.k.x1 +","+p.k.y1 +" " + p.k.y2 +","+p.k.y2 + "|" + p.v.x1 +","+p.v.y1 +" " + p.v.y2 +","+p.v.y2);
+                    //System.out.println(p.k.x1 +","+p.k.y1 +" " + p.k.y2 +","+p.k.y2 + "|" + p.v.x1 +","+p.v.y1 +" " + p.v.y2 +","+p.v.y2);
                 }
+                System.out.println(uniques.size());
+                /*for (String u:uniques) {
+                    System.out.println(u);
+                }*/
+
                 break;
             }
             case "similarity-test" :{
