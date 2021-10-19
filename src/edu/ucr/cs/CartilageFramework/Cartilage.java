@@ -14,10 +14,7 @@ package edu.ucr.cs.CartilageFramework;/*
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 interface Summary<T> {
   void add(T k);
@@ -103,16 +100,33 @@ public class Cartilage {
     for (Map.Entry<Integer, List<K>> bucket1 : buckets1.entrySet()) {
       for (Map.Entry<Integer, List<K>> bucket2 : buckets2.entrySet()) {
         if (joiner.match(bucket1.getKey(), bucket2.getKey())) {
-
-          
-
           // Join all records in the matching buckets
           for (K k1 : bucket1.getValue()) {
             for (K k2 : bucket2.getValue()) {
               if (joiner.verify(bucket1.getKey(), k1, bucket2.getKey(), k2, c)) {
-                // Add to result
-                if(!results.contains(new Pair<>(k1, k2)))
-                  results.add(new Pair<>(k1, k2));
+                //Duplicate avoidance
+                int[] buckets1DA = joiner.assign1(k1, c);
+                int[] buckets2DA = joiner.assign2(k2, c);
+
+                Arrays.sort(buckets1DA);
+                Arrays.sort(buckets2DA);
+
+                boolean stop = false;
+                for(int b1:buckets1DA) {
+                  for(int b2:buckets2DA) {
+                    if(joiner.match(b1, b2)) {
+                      if(b1 == bucket1.getKey() && b2 == bucket2.getKey()) {
+                        // Add to result
+                        if (!results.contains(new Pair<>(k1, k2)))
+                          results.add(new Pair<>(k1, k2));
+                      }
+                      stop = true;
+                      break;
+                    }
+                  }
+                  if(stop) break;
+                }
+
               }
             }
           }

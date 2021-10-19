@@ -143,7 +143,6 @@ abstract class Utilities {
         String lowerCaseText = text.toLowerCase();
         int startIx = 0;
 
-
         while (startIx < lowerCaseText.length()) {
             while (startIx < lowerCaseText.length() && isSeparator(lowerCaseText.charAt(startIx))) {
                 startIx++;
@@ -155,7 +154,6 @@ abstract class Utilities {
             }
             int tokenEnd = startIx;
 
-            // Emit token.
             String token = lowerCaseText.substring(tokenStart, tokenEnd);
 
             if(!token.isEmpty()) tokens.add(token);

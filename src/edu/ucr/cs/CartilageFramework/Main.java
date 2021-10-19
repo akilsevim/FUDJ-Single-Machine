@@ -36,15 +36,15 @@ public class Main {
 
                 List<Pair<String, String>> results = c.flexibleJoin(r, s, joiner);
                 System.out.println(results.size());
-                HashSet<String> uniques = new HashSet<>();
-                float totalsim = 0.0f;
+                //HashSet<String> uniques = new HashSet<>();
+                //float totalsim = 0.0f;
                 for (Pair<String, String> p : results) {
                     System.out.println(p.k + " / " + p.v + "("+Utilities.calculateJaccardSimilarityS(p.k,p.v )+")");
-                    uniques.add(p.k + " / " + p.v);
-                    totalsim += Utilities.calculateJaccardSimilarityS(p.k,p.v );
+                    //uniques.add(p.k + " / " + p.v);
+                    //totalsim += Utilities.calculateJaccardSimilarityS(p.k,p.v );
 
                 }
-                System.out.println(uniques.size());
+                /*System.out.println(uniques.size());
                 List<String> tt = new ArrayList<>();
                 try (Stream<String> stream = Files.lines(Paths.get("testtext.csv"), StandardCharsets.UTF_8)) {
                     stream.forEach(tt::add);
@@ -57,7 +57,7 @@ public class Main {
                         ttc.remove(t);
                     if(uniques.size() == 0) break;
                 }
-                System.out.println(uniques.size());
+                System.out.println(uniques.size());*/
                 break;
             }
             case "spatial": {
