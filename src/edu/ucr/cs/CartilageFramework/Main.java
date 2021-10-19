@@ -35,29 +35,31 @@ public class Main {
                 }
 
                 List<Pair<String, String>> results = c.flexibleJoin(r, s, joiner);
-                System.out.println(results.size());
-                //HashSet<String> uniques = new HashSet<>();
+
+                ArrayList<String> uniques = new ArrayList<>();
                 //float totalsim = 0.0f;
                 for (Pair<String, String> p : results) {
                     System.out.println(p.k + " / " + p.v + "("+Utilities.calculateJaccardSimilarityS(p.k,p.v )+")");
-                    //uniques.add(p.k + " / " + p.v);
+                    uniques.add(p.k + " / " + p.v);
                     //totalsim += Utilities.calculateJaccardSimilarityS(p.k,p.v );
 
                 }
-                /*System.out.println(uniques.size());
-                List<String> tt = new ArrayList<>();
+                System.out.println(results.size());
+                /*List<String> tt = new ArrayList<>();
                 try (Stream<String> stream = Files.lines(Paths.get("testtext.csv"), StandardCharsets.UTF_8)) {
                     stream.forEach(tt::add);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                List<String> ttc = new ArrayList<>(tt);
                 for(String t: tt) {
-                    if(uniques.remove(t))
-                        ttc.remove(t);
-                    if(uniques.size() == 0) break;
+                    uniques.remove(t);
+                    System.out.println(uniques.size());
                 }
-                System.out.println(uniques.size());*/
+                System.out.println(uniques.size() + "---------------------------------------------------");
+                for(String t: uniques) {
+                    System.out.println(t);
+                }*/
+
                 break;
             }
             case "spatial": {

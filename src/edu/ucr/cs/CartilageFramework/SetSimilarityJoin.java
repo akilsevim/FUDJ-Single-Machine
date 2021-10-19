@@ -33,13 +33,20 @@ public class SetSimilarityJoin implements FlexibleJoin<String, SetSimilarityConf
     public int[] assign1(String k1, SetSimilarityConfig setSimilarityConfig) {
         ArrayList<String> tokens = Utilities.tokenizer(k1);
         int length = tokens.size();
-        int[] ranks = new int[length];
-        for(int i = 0; i < length; i++) {
-            ranks[i] = setSimilarityConfig.S.get(tokens.get(i));
+        int PrefixLength = (int)(length - Math.ceil(SimilarityThreshold * length) + 1);
+        ArrayList<Integer> ranks = new ArrayList<>();
+        for (String token : tokens) {
+            int rank = setSimilarityConfig.S.get(token);
+            if (!ranks.contains(rank)) ranks.add(rank);
         }
-        Arrays.sort(ranks);
-        Double PrefixLength = (length - Math.ceil(SimilarityThreshold * length) + 1);
-        return Arrays.copyOfRange(ranks, 0, PrefixLength.intValue());
+        int[] ranksToReturn = new int[PrefixLength];
+        Collections.sort(ranks);
+        for(int i = 0; i < PrefixLength; i++) {
+            if(i >= ranks.size()) break;
+            ranksToReturn[i] = ranks.get(i);
+
+        }
+        return ranksToReturn;
     }
 
     @Override

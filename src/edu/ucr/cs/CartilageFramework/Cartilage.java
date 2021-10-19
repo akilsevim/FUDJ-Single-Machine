@@ -114,6 +114,7 @@ public class Cartilage {
                 boolean stop = false;
                 for(int b1:buckets1DA) {
                   for(int b2:buckets2DA) {
+
                     if(joiner.match(b1, b2)) {
                       if(b1 == bucket1.getKey() && b2 == bucket2.getKey()) {
                         // Add to result
