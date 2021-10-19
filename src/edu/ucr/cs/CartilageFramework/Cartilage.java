@@ -117,8 +117,6 @@ public class Cartilage {
 
                     if(joiner.match(b1, b2)) {
                       if(b1 == bucket1.getKey() && b2 == bucket2.getKey()) {
-                        // Add to result
-                        if (!results.contains(new Pair<>(k1, k2)))
                           results.add(new Pair<>(k1, k2));
                       }
                       stop = true;
